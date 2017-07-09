@@ -67,7 +67,7 @@ void ParticleFilter::prediction(double delta_t, double std_pos[], double velocit
 
     std::default_random_engine generator;
 
-    for (unsigned int i = 0; i < num_particles; i++) {
+    for (unsigned i = 0; i < num_particles; ++i) {
 
         x_0 = particles[i].x;
         y_0 = particles[i].y;
@@ -96,7 +96,6 @@ void ParticleFilter::prediction(double delta_t, double std_pos[], double velocit
         particles[i].y      = dist_y(generator);
         particles[i].theta  = dist_theta(generator);
     }
-
 }
 
 
@@ -106,6 +105,24 @@ void ParticleFilter::dataAssociation(std::vector<LandmarkObs> predicted, std::ve
 	// NOTE: this method will NOT be called by the grading code. But you will probably find it useful to 
 	//   implement this method and use it as a helper during the updateWeights phase.
 
+    double meas;
+    double min_meas = 1e6;
+
+    for (unsigned i = 0; i < observations.size(); ++i) {
+
+        for (unsigned j = 0; j < predicted.size(); ++j) {
+
+            meas = dist(observations[i].x,
+                            observations[i].y,
+                            predicted[j].x,
+                            predicted[j].y);
+
+            if (distance < min_meas) {
+                observations[i].id = predicted[j].id;
+                min_meas = meas;
+            }
+        }
+    }
 }
 
 
