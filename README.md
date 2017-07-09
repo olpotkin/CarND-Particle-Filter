@@ -1,8 +1,14 @@
-
 # 2-dimensional Particle Filter
+
+[image1]: ./imgs/im_01.png "schema"
+[image2]: ./imgs/im_02.png "result"
 
 ## Project Introduction
 Robot has been kidnapped and transported to a new location! Luckily it has a map of this location, a (noisy) GPS estimate of its initial location, and lots of (noisy) sensor and control data.
+
+General pipeline of the project:
+
+![alt text][image1]
 
 In this project implemented a 2 dimensional particle filter in C++. Particle filter will be given a map and some initial localization information (analogous to what a GPS would provide). At each time step filter will also get observation and control data. 
 
@@ -104,3 +110,8 @@ You can find the inputs to the particle filter in the `data` directory.
 ### All other data the simulator provides, such as observations and controls.
 
 > * Map data provided by 3D Mapping Solutions GmbH.
+
+### FInal Result:
+
+![alt text][image2]
+
