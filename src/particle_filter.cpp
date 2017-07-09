@@ -61,6 +61,41 @@ void ParticleFilter::prediction(double delta_t, double std_pos[], double velocit
 	//  http://en.cppreference.com/w/cpp/numeric/random/normal_distribution
 	//  http://www.cplusplus.com/reference/random/default_random_engine/
 
+    double x_0, y_0, theta_0;
+    double x_f, y_f, theta_f;
+    double small_num = 0.000001;
+
+    std::default_random_engine generator;
+
+    for (unsigned int i = 0; i < num_particles; i++) {
+
+        x_0 = particles[i].x;
+        y_0 = particles[i].y;
+        theta_0 = particles[i].theta;
+
+        if (fabs(yaw_rate) > small_num) {
+
+            x_f     = x_0 + velocity / yaw_rate * (sin(theta_0 + yaw_rate * delta_t) - sin(theta_0));
+            y_f     = y_0 + velocity / yaw_rate * (cos(theta_0) - cos(theta_0 + yaw_rate * delta_t));
+            theta_f = theta_0 + yaw_rate * delta_t;
+        }
+        else {
+
+            x_f     = x_0 + velocity * delta_t * cos(theta_0);
+            y_f     = y_0 + velocity * delta_t * sin(theta_0);
+            theta_f = theta_0;
+        }
+
+        // Update the particle position with the prediction
+        // and add Gaussian noise
+        std::normal_distribution<double> dist_x(x_f, std_pos[0]);
+        std::normal_distribution<double> dist_y(y_f, std_pos[1]);
+        std::normal_distribution<double> dist_theta(theta_f, std_pos[2]);
+
+        particles[i].x      = dist_x(generator);
+        particles[i].y      = dist_y(generator);
+        particles[i].theta  = dist_theta(generator);
+    }
 
 }
 
